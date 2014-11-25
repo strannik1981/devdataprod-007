@@ -7,17 +7,25 @@ shinyUI(navbarPage(
         mainPanel(
             absolutePanel(
                 top = 50, left = 10, right = 0,
+                h3("mtcars - a linear models playground"),
+                p("Review the data below, if desired add new entries to the dataset by using the panel on the right. If you would like to download the (augmented) dataset and continue experimenting with it in your local R environment, please use the button at the bottom of the page."),
+                p("To build a linear model of fuel efficiency based on the (augmented) dataset below, please use the Data link above. To review diagnostic plots associated with a linear model, please visit the Diagnostics page."),
                 dataTableOutput('table')
             ),
+            absolutePanel(
+                bottom = 20, left = 20, width = 300,
+                draggable = TRUE,
+                wellPanel(
+                    h4("Download current dataset"),
+                    downloadButton('downloadData', 'Download')
+                )
+            ),   
             absolutePanel(
                 top = 20, right = 20, width = 300,
                 draggable = TRUE,
                 wellPanel(
-                    h3("Download current dataset"),
-                    downloadButton('downloadData', 'Download'),
-                    hr(),
                     h3("Add new model"),
-                    p("Drag the input panel to see all available options."),
+                    p("If you wish to add a new car model to the dataset, please enter the values below. Drag the input panel to see all available input options."),
                     textInput("model", "Model:",""),
                     numericInput("mpg", "Miles/(US) gallon:", 0, min=0, step=0.1),
                     numericInput("cyl", "Number of cylinders:", 0, min=0, step=1),
@@ -47,8 +55,8 @@ shinyUI(navbarPage(
                     top = 20, right = 20, width = 300,
                     draggable = TRUE,
                     wellPanel(
-                        h3("Model variables"),
-                        p("Select variables to use as predictors, with mpg as response. Note that since we are interested in the importance of transmission type, am is included by default."),
+                        h3("Linear model variables"),
+                        p("Select variables to use as predictors, with mpg as response. Note that since we are interested in the importance of transmission type, am will be included by default."),
                         checkboxGroupInput("modelVariables", label=NULL,
                             choices = list("Number of cylinders - cyl" = "factor(cyl)", "    cyl interaction with am" = "factor(cyl)*factor(am)",
                                            "Displacement - disp" = "disp", "    disp interaction with am" = "disp*factor(am)",
@@ -77,6 +85,15 @@ shinyUI(navbarPage(
                 plotOutput("normalQQ",width=800,height=800),
                 plotOutput("scaleLocation",width=800,height=800),
                 plotOutput("residualsVsLeverage",width=800,height=800)
+            ),
+            absolutePanel(
+                top = 20, right = 20, width = 300,
+                draggable = TRUE,
+                wellPanel(
+                    p("To the left you can see the four major diagnostic plots associated with the linear model you built on the Model page based on the dataset presented on Data page."),
+                    p("The plots are: residuals versus fitted values, a Q-Q plot of standardized residuals, a scale-location plot (square roots of standardized residuals versus fitted values), and a plot of residuals versus leverage that adds bands corresponding to Cook's distances of 0.5 and 1."),
+                    p("These plots are among the many tools that allow one to evaluate how well one's linear model fits the data, may suggest possible further avenues of exploration, and indicate \"interesting\" points. If you would like to know more about linear models, consider attending the Linear Regression class in the Data Science specialization.")
+                )
             )
         )
     )
