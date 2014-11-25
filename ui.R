@@ -8,16 +8,15 @@ shinyUI(navbarPage(
             absolutePanel(
                 top = 50, left = 10, right = 0,
                 h3("mtcars - a linear models playground"),
-                p("Review the data below, if desired add new entries to the dataset by using the panel on the right. If you would like to download the (augmented) dataset and continue experimenting with it in your local R environment, please use the button at the bottom of the page."),
-                p("To build a linear model of fuel efficiency based on the (augmented) dataset below, please use the Data link above. To review diagnostic plots associated with a linear model, please visit the Diagnostics page."),
+                p("Review the data below, if desired add new entries to the dataset by using the panel on the right. If you would like or to download the (augmented) dataset and continue experimenting with it in your local R environment, please use the button at the bottom of the page."),
+                p("To view predictor vs mpg plots, please follow the Exploration link above. To build a linear model of fuel efficiency based on the (augmented) dataset below, please use the Data link above. To review diagnostic plots associated with a linear model, please visit the Diagnostics page."),
                 dataTableOutput('table')
             ),
             absolutePanel(
-                bottom = 20, left = 20, width = 300,
+                bottom = 20, left = 20,
                 draggable = TRUE,
                 wellPanel(
-                    h4("Download current dataset"),
-                    downloadButton('downloadData', 'Download')
+                    downloadButton('downloadData', 'Download the dataset')
                 )
             ),   
             absolutePanel(
@@ -45,6 +44,24 @@ shinyUI(navbarPage(
             )
         )
     ),
+    tabPanel('Exploration', 
+             mainPanel(
+                 absolutePanel(
+                     top = 50, left = 10, right = 0,
+                     h2("Exploration plots"),
+                     plotOutput("vsAm",width=600,height=600),
+                     plotOutput("vsCyl",width=600,height=600),
+                     plotOutput("vsDisp",width=600,height=600),
+                     plotOutput("vsHp",width=600,height=600),
+                     plotOutput("vsDrat",width=600,height=600),
+                     plotOutput("vsWt",width=600,height=600),
+                     plotOutput("vsQsec",width=600,height=600),
+                     plotOutput("vsVs",width=600,height=600),
+                     plotOutput("vsGear",width=600,height=600),
+                     plotOutput("vsCarb",width=600,height=600)
+                 )
+             )
+    ),
     tabPanel('Model', 
             mainPanel(
                 absolutePanel(
@@ -56,17 +73,17 @@ shinyUI(navbarPage(
                     draggable = TRUE,
                     wellPanel(
                         h3("Linear model variables"),
-                        p("Select variables to use as predictors, with mpg as response. Note that since we are interested in the importance of transmission type, am will be included by default."),
-                        checkboxGroupInput("modelVariables", label=NULL,
-                            choices = list("Number of cylinders - cyl" = "factor(cyl)", "    cyl interaction with am" = "factor(cyl)*factor(am)",
-                                           "Displacement - disp" = "disp", "    disp interaction with am" = "disp*factor(am)",
-                                           "Gross horsepower - hp" = "hp", "    hp interaction with am" = "hp*factor(am)",
-                                           "Rear axle ratio - drat" = "drat", "    drat interaction with am" = "drat*factor(am)",
-                                           "Weight - wt" = "wt", "    wt interaction with am" = "wt*factor(am)",
-                                           "1/4 mile time - qsec" = "qsec", "    qsec interaction with am" = "qsec*factor(am)",
-                                           "Engine shape - vs" = "vs", "    vs interaction with am" = "vs*factor(am)",
-                                           "Number of forward gears - gear" = "gear", "    gear interaction with am" = "gear*factor(am)",
-                                           "Number of carburators - carb" = "carb", "    carb interaction with am" = "hp*factor(am)"
+                        p("Select variables to use as predictors, with mpg as response."),
+                        checkboxGroupInput("modelVariables", label=NULL, selected = "factor(am)",
+                            choices = list("Transmission type - am" = "factor(am)", "Number of cylinders - cyl" = "factor(cyl)", "cyl interaction with am" = "factor(cyl)*factor(am)",
+                                           "Displacement - disp" = "disp", "disp interaction with am" = "disp*factor(am)",
+                                           "Gross horsepower - hp" = "hp", "hp interaction with am" = "hp*factor(am)",
+                                           "Rear axle ratio - drat" = "drat", "drat interaction with am" = "drat*factor(am)",
+                                           "Weight - wt" = "wt", "wt interaction with am" = "wt*factor(am)",
+                                           "1/4 mile time - qsec" = "qsec", "qsec interaction with am" = "qsec*factor(am)",
+                                           "Engine shape - vs" = "vs", "vs interaction with am" = "vs*factor(am)",
+                                           "Number of forward gears - gear" = "gear", "gear interaction with am" = "gear*factor(am)",
+                                           "Number of carburators - carb" = "carb", "carb interaction with am" = "hp*factor(am)"
                             )
                         ),
                         br(),
